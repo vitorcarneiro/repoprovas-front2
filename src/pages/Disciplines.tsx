@@ -157,7 +157,10 @@ function Categories({ categories, teachersDisciplines }: CategoriesProps) {
         .map((category) => (
           <Box key={category.id}>
             <Typography fontWeight="bold">{category.name}</Typography>
-            <TeachersDisciplines teachersDisciplines={teachersDisciplines} />
+            <TeachersDisciplines
+              categoryId={category.id}
+              teachersDisciplines={teachersDisciplines}
+            />
           </Box>
         ))}
     </>
@@ -166,51 +169,62 @@ function Categories({ categories, teachersDisciplines }: CategoriesProps) {
 
 interface TeacherDisciplineProps {
   teachersDisciplines: TeacherDisciplines[];
+  categoryId: number;
 }
 
 function doesCategoryHaveTests(teachersDisciplines: TeacherDisciplines[]) {
   return (category: Category) =>
     teachersDisciplines.filter((teacherDiscipline) =>
-      testOfThisCategory(teacherDiscipline, category)
+      someTestOfCategory(teacherDiscipline.tests, category.id)
     ).length > 0;
 }
 
-function testOfThisCategory(
-  teacherDiscipline: TeacherDisciplines,
-  category: Category
-) {
-  return teacherDiscipline.tests.some(
-    (test) => test.category.id === category.id
-  );
+function someTestOfCategory(tests: Test[], categoryId: number) {
+  return tests.some((test) => test.category.id === categoryId);
 }
 
-function TeachersDisciplines({ teachersDisciplines }: TeacherDisciplineProps) {
+function testOfCategory(test: Test, categoryId: number) {
+  return test.category.id === categoryId;
+}
+
+function TeachersDisciplines({
+  categoryId,
+  teachersDisciplines,
+}: TeacherDisciplineProps) {
   const testsWithDisciplines = teachersDisciplines.map((teacherDiscipline) => ({
     tests: teacherDiscipline.tests,
     teacherName: teacherDiscipline.teacher.name,
   }));
 
-  return <Tests testsWithTeachers={testsWithDisciplines} />;
+  return (
+    <Tests categoryId={categoryId} testsWithTeachers={testsWithDisciplines} />
+  );
 }
 
 interface TestsProps {
   testsWithTeachers: { tests: Test[]; teacherName: string }[];
+  categoryId: number;
 }
 
-function Tests({ testsWithTeachers: testsWithDisciplines }: TestsProps) {
+function Tests({
+  categoryId,
+  testsWithTeachers: testsWithDisciplines,
+}: TestsProps) {
   return (
     <>
       {testsWithDisciplines.map((testsWithDisciplines) =>
-        testsWithDisciplines.tests.map((test) => (
-          <Typography key={test.id} color="#878787">
-            <Link
-              href={test.pdfUrl}
-              target="_blank"
-              underline="none"
-              color="inherit"
-            >{`${test.name} (${testsWithDisciplines.teacherName})`}</Link>
-          </Typography>
-        ))
+        testsWithDisciplines.tests
+          .filter((test) => testOfCategory(test, categoryId))
+          .map((test) => (
+            <Typography key={test.id} color="#878787">
+              <Link
+                href={test.pdfUrl}
+                target="_blank"
+                underline="none"
+                color="inherit"
+              >{`${test.name} (${testsWithDisciplines.teacherName})`}</Link>
+            </Typography>
+          ))
       )}
     </>
   );
