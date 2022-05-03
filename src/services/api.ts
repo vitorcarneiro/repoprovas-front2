@@ -92,12 +92,39 @@ async function getCategories(token: string) {
   return baseAPI.get<{ categories: Category[] }>("/categories", config);
 }
 
+export interface TestsInfos {
+  categories: Category[],
+  teachersDisciplines: TeacherDisciplines[]
+}
+
+async function getInfoForCreateTest(token: string) {
+  const config = getConfig(token);
+  return baseAPI.get(
+    "/tests/info",
+    config
+  );
+}
+
+interface TestData {
+  name: string;
+  pdfUrl: string;
+  categoryId: number;
+  teacherDisciplineId: number;
+}
+
+async function createTest(token: string, testData: TestData) {
+  const config = getConfig(token);
+  return baseAPI.post("/tests/create", testData, config);
+}
+
 const api = {
   signUp,
   signIn,
   getTestsByDiscipline,
   getTestsByTeacher,
   getCategories,
+  getInfoForCreateTest,
+  createTest
 };
 
 export default api;

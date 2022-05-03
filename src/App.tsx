@@ -1,6 +1,5 @@
 import { ThemeProvider } from "@emotion/react";
 import { createTheme, CssBaseline } from "@mui/material";
-import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Alert from "./components/Alert";
 import { MainApp } from "./components/MainApp";
@@ -8,6 +7,7 @@ import { AlertProvider } from "./contexts/AlertContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import Disciplines from "./pages/Disciplines";
 import Instructors from "./pages/Instructors";
+import CreateTest from "./pages/CreateTest";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 
@@ -26,13 +26,15 @@ function App() {
         <AuthProvider>
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<SignUp />} />
-              <Route path="/login" element={<SignIn />} />
+              <Route path="/" element={<SignIn />} />
+              <Route path="/sign-up" element={<SignUp />} />
               <Route path="app" element={<MainApp />}>
                 <Route path="/app/disciplinas" element={<Disciplines />} />
                 <Route
-                  path="/app/pessoas-instrutoras"
-                  element={<Instructors />}
+                  path="/app/pessoas-instrutoras" element={<Instructors />}
+                />
+                <Route
+                  path="/app/adicionar" element={<CreateTest />}
                 />
               </Route>
             </Routes>

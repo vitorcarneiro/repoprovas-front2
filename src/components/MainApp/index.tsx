@@ -16,7 +16,7 @@ export function MainApp({ redirectPath = "/login" }: Props) {
   }
 
   function handleSignOut() {
-    navigate("/login");
+    navigate("/");
     signOut();
   }
 
