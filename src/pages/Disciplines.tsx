@@ -210,6 +210,8 @@ function Tests({
   categoryId,
   testsWithTeachers: testsWithDisciplines,
 }: TestsProps) {
+  const { token } = useAuth();
+
   return (
     <>
       {testsWithDisciplines.map((testsWithDisciplines) =>
@@ -219,10 +221,10 @@ function Tests({
             <Typography key={test.id} color="#878787">
               <Link
                 href={test.pdfUrl}
-                target="_blank"
                 underline="none"
                 color="inherit"
-              >{`${test.name} (${testsWithDisciplines.teacherName})`}</Link>
+                onClick={ () => api.addTestView(typeof(token) === 'string' ? token : 'invalid ', test.id) }
+              >{`${test.name} (${testsWithDisciplines.teacherName}) | views: ${test.views}`}</Link>
             </Typography>
           ))
       )}

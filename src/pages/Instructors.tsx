@@ -168,6 +168,7 @@ function Categories({
     <>
       <Box sx={{ marginBottom: "8px" }}>
         <Typography fontWeight="bold">{category.name}</Typography>
+        
         {teachersDisciplines
           .filter(
             (teacherDiscipline) => teacherDiscipline.teacher.name === teacher
@@ -192,16 +193,18 @@ interface TestsProps {
 }
 
 function Tests({ tests, disciplineName }: TestsProps) {
+  const { token } = useAuth();
+  
   return (
     <>
       {tests.map((test) => (
         <Typography key={test.id} color="#878787">
           <Link
             href={test.pdfUrl}
-            target="_blank"
             underline="none"
             color="inherit"
-          >{`${test.name} (${disciplineName})`}</Link>
+            onClick={ () => api.addTestView(typeof(token) === 'string' ? token : 'invalid ', test.id) }
+          >{`${test.name} (${disciplineName}) | views: ${test.views}`}</Link>
         </Typography>
       ))}
     </>
