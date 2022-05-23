@@ -18,7 +18,7 @@ import api from "../services/api";
 
 const styles = {
   container: {
-    marginTop: "180px",
+    marginTop: "50px",
     width: "460px",
     display: "flex",
     flexDirection: "column",
@@ -38,6 +38,9 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "center",
   },
+  logo: {
+    width: "100px",
+  }
 };
 
 interface FormData {
@@ -93,13 +96,14 @@ function SignIn() {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Logo />
+      <Logo style={styles.logo} />
+      <h1>FCS - Stocker</h1>
       <Box sx={styles.container}>
         <Typography sx={styles.title} variant="h4" component="h1">
           Login
         </Typography>
         <Button variant="contained" color="secondary">
-          Entrar com Github
+          Entrar com Google
         </Button>
         <Box sx={styles.dividerContainer}>
           <Divider sx={{ flex: "1" }} />
